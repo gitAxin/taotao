@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.pojo.DataGridResult;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemExample;
@@ -37,11 +39,16 @@ public class ItemServiceImpl implements ItemService {
 
 
 	@Override
-	public List<TbItem> getItemList(Integer page, Integer rows) {
+	public DataGridResult getItemList(Integer page, Integer rows) {
 		TbItemExample example = new TbItemExample();
 		PageHelper.startPage(page, rows);
 		List<TbItem> list = this.tbItemMapper.selectByExample(example);
-		return list;
+		PageInfo<TbItem> pageInfo = new PageInfo<TbItem>(list);
+		long total = pageInfo.getTotal();
+		DataGridResult result = new DataGridResult();
+		result.setRows(list);
+		result.setTotal(total);
+		return result;
 	}
 	
 	

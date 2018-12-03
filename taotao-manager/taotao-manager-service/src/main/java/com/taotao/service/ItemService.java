@@ -1,7 +1,6 @@
 package com.taotao.service;
 
-import java.util.List;
-
+import com.taotao.common.pojo.DataGridResult;
 import com.taotao.pojo.TbItem;
 
 public interface ItemService {
@@ -25,6 +24,6 @@ public interface ItemService {
 	 * @param rows
 	 * @return
 	 */
-	List<TbItem> getItemList(Integer page, Integer rows);
+	DataGridResult getItemList(Integer page, Integer rows);
 
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.taotao.common.pojo.DataGridResult;
 import com.taotao.pojo.TbItem;
 import com.taotao.service.ItemService;
 
@@ -45,16 +46,12 @@ public class ItemController {
 		TbItem item = this.itemService.getItemById(itemId);
 		return item;
 	}
+	
 	@RequestMapping("/item/list")
 	@ResponseBody
-	public Map<String,Object> getItemList(Integer page, Integer rows){
-		List<TbItem> list = this.itemService.getItemList(page, rows);
-		PageInfo<TbItem> pageInfo = new PageInfo<TbItem>(list);
-		long total = pageInfo.getTotal();
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("total", total);
-		map.put("rows", list);
-		return map;
+	public DataGridResult getItemList(Integer page, Integer rows){
+		DataGridResult result = this.itemService.getItemList(page, rows);
+		return result;
 	}
 	
 	
