@@ -34,8 +34,21 @@ public interface ItemService {
 	 * @param: @param item
 	 * @param: @return      
 	 * @return: TaotaoResult      
+	 * @throws Exception
+	 */
+	TaotaoResult createItem(TbItem item,String desc)  throws Exception ;
+	
+	
+	/**
+	 * @Title: insertItemDesc   
+	 * @Description: 插入商品描述 
+	 * @param: @param itemId
+	 * @param: @param desc
+	 * @param: @return      
+	 * @return: TaotaoResult      
 	 * @throws
 	 */
-	TaotaoResult createItem(TbItem item);
+	TaotaoResult insertItemDesc(long itemId, String desc);
+	
 
 }

@@ -52,6 +52,7 @@ public class ItemController {
 	}
 	
 	/**
+	 * @throws Exception 
 	 * @Title: createItem   
 	 * @Description: 添加商品  
 	 * @param: @param item
@@ -61,8 +62,8 @@ public class ItemController {
 	 */
 	@RequestMapping(value="/item/save", method = RequestMethod.POST)
 	@ResponseBody
-	public TaotaoResult createItem(TbItem item){
-		TaotaoResult result = this.itemService.createItem(item);
+	public TaotaoResult createItem(TbItem item, String desc) throws Exception{
+		TaotaoResult result = this.itemService.createItem(item,desc);
 		return result;
 	}
 	

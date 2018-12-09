@@ -12,8 +12,10 @@ import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.DataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.utils.IDUtils;
+import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemExample;
 import com.taotao.service.ItemService;
 
@@ -30,6 +32,8 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Autowired
 	private TbItemMapper tbItemMapper;
+	@Autowired
+	private TbItemDescMapper tbItemDescMapper;
 
 
 	
@@ -56,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
 
 
 	@Override
-	public TaotaoResult createItem(TbItem item) {
+	public TaotaoResult createItem(TbItem item,String desc) throws Exception {
 		long itemId = IDUtils.genItemId();
 		item.setId(itemId);
 		//商品状态，1-正常，2-下架，3-删除
@@ -64,6 +68,25 @@ public class ItemServiceImpl implements ItemService {
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
 		tbItemMapper.insert(item);
+		//添加商品描述
+		
+		TaotaoResult descResult = insertItemDesc(itemId,desc);
+		if(descResult.getStatus() != 200){
+			throw new Exception("商品描述添加失败");
+		}
+		return TaotaoResult.ok();
+	}
+
+
+
+	@Override
+	public TaotaoResult insertItemDesc(long itemId, String desc) {
+		TbItemDesc itemDesc = new TbItemDesc();
+		itemDesc.setItemId(itemId);
+		itemDesc.setItemDesc(desc);
+		itemDesc.setCreated(new Date());
+		itemDesc.setUpdated(new Date());
+		this.tbItemDescMapper.insert(itemDesc);
 		return TaotaoResult.ok();
 	}
 	
