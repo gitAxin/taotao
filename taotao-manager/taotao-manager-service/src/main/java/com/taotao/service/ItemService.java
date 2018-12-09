@@ -1,6 +1,7 @@
 package com.taotao.service;
 
 import com.taotao.common.pojo.DataGridResult;
+import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.pojo.TbItem;
 
 public interface ItemService {
@@ -25,5 +26,16 @@ public interface ItemService {
 	 * @return
 	 */
 	DataGridResult getItemList(Integer page, Integer rows);
+	
+	
+	/**
+	 * @Title: createItem   
+	 * @Description: 添加商品  
+	 * @param: @param item
+	 * @param: @return      
+	 * @return: TaotaoResult      
+	 * @throws
+	 */
+	TaotaoResult createItem(TbItem item);
 
 }
