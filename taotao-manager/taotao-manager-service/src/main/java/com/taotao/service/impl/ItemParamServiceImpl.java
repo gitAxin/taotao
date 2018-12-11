@@ -16,6 +16,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.pojo.DataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.mapper.TbItemParamMapper;
 import com.taotao.pojo.TbItemParam;
@@ -36,6 +39,25 @@ public class ItemParamServiceImpl implements ItemParamService{
 	@Autowired
 	private TbItemParamMapper itemParamMapper;
 	
+	
+	
+	/* (non-Javadoc)
+	 * @see com.taotao.service.ItemParamService#getItemParamList(java.lang.Integer, java.lang.Integer)
+	 */
+	@Override
+	public DataGridResult getItemParamList(Integer page, Integer rows) {
+		TbItemParamExample example = new TbItemParamExample();
+		PageHelper.startPage(page,  rows);
+		List<TbItemParam> list = this.itemParamMapper.selectByExampleWithBLOBs(example);
+		PageInfo<TbItemParam> pageInfo = new PageInfo<>(list);
+		long total = pageInfo.getTotal();
+		
+		DataGridResult result = new DataGridResult();
+		result.setTotal(total);
+		result.setRows(list);
+		return result;
+	}
+
 	@Override
 	public TaotaoResult getItemParamByCid(long cid) {
 		TbItemParamExample example = new TbItemParamExample();

@@ -10,6 +10,7 @@
  */
 package com.taotao.service;
 
+import com.taotao.common.pojo.DataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.pojo.TbItemParam;
 
@@ -22,6 +23,8 @@ import com.taotao.pojo.TbItemParam;
  */
 public interface ItemParamService {
 	
+	
+	DataGridResult getItemParamList(Integer page, Integer rows);
 	
 	TaotaoResult getItemParamByCid(long cid);
 	
