@@ -14,9 +14,11 @@ import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.utils.IDUtils;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
+import com.taotao.mapper.TbItemParamItemMapper;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemExample;
+import com.taotao.pojo.TbItemParamItem;
 import com.taotao.service.ItemService;
 
 /**
@@ -34,7 +36,8 @@ public class ItemServiceImpl implements ItemService {
 	private TbItemMapper tbItemMapper;
 	@Autowired
 	private TbItemDescMapper tbItemDescMapper;
-
+	@Autowired 
+	private TbItemParamItemMapper itemParamItemMapper;
 
 	
 	@Override
@@ -59,8 +62,8 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 
-	@Override
-	public TaotaoResult createItem(TbItem item,String desc) throws Exception {
+	
+	public TaotaoResult createItem(TbItem item,String desc, String itemParam) throws Exception {
 		long itemId = IDUtils.genItemId();
 		item.setId(itemId);
 		//商品状态，1-正常，2-下架，3-删除
@@ -70,17 +73,29 @@ public class ItemServiceImpl implements ItemService {
 		tbItemMapper.insert(item);
 		//添加商品描述
 		
-		TaotaoResult descResult = insertItemDesc(itemId,desc);
-		if(descResult.getStatus() != 200){
+		TaotaoResult result = insertItemDesc(itemId,desc);
+		if(result.getStatus() != 200){
 			throw new Exception("商品描述添加失败");
+		}
+		
+		result = insertItemParamItem(itemId, itemParam);
+		if(result.getStatus() != 200){
+			throw new Exception("商品规格参数添加失败");
 		}
 		return TaotaoResult.ok();
 	}
 
 
-
-	@Override
-	public TaotaoResult insertItemDesc(long itemId, String desc) {
+	/**
+	 * @Title: insertItemDesc   
+	 * @Description: 添加商品描述 
+	 * @param: @param itemId
+	 * @param: @param desc
+	 * @param: @return      
+	 * @return: TaotaoResult      
+	 * @throws
+	 */
+	private TaotaoResult insertItemDesc(long itemId, String desc) {
 		TbItemDesc itemDesc = new TbItemDesc();
 		itemDesc.setItemId(itemId);
 		itemDesc.setItemDesc(desc);
@@ -91,7 +106,24 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	
-	
-	
+	/**
+	 * 
+	 * @Title: insertItemParamItem   
+	 * @Description: 添加规格参数 
+	 * @param: @param itemId
+	 * @param: @param itemParam
+	 * @param: @return      
+	 * @return: TaotaoResult      
+	 * @throws
+	 */
+	private TaotaoResult insertItemParamItem(long itemId, String itemParam){
+		TbItemParamItem itemParamItem = new TbItemParamItem();
+		itemParamItem.setItemId(itemId);
+		itemParamItem.setParamData(itemParam);
+		itemParamItem.setCreated(new Date());
+		itemParamItem.setUpdated(new Date());
+		this.itemParamItemMapper.insert(itemParamItem);
+		return TaotaoResult.ok();
+	}
 
 }

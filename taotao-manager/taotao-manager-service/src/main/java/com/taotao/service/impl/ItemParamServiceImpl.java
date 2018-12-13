@@ -62,7 +62,7 @@ public class ItemParamServiceImpl implements ItemParamService{
 	public TaotaoResult getItemParamByCid(long cid) {
 		TbItemParamExample example = new TbItemParamExample();
 		example.createCriteria().andItemCatIdEqualTo(cid);
-		List<TbItemParam> list = this.itemParamMapper.selectByExample(example);
+		List<TbItemParam> list = this.itemParamMapper.selectByExampleWithBLOBs(example);
 		//判断是否查询到结果
 		if(list != null && list.size()>0){
 			return TaotaoResult.ok(list.get(0));
