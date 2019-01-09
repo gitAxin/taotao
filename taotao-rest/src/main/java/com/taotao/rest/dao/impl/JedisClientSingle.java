@@ -110,4 +110,28 @@ public class JedisClientSingle implements JedisClient {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.taotao.rest.dao.JedisClient#del(java.lang.String)
+	 */
+	@Override
+	public long del(String key) {
+		Jedis jedis = jedisPool.getResource();
+		Long result = jedis.del(key);
+		jedis.close();
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taotao.rest.dao.JedisClient#hdel(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public long hdel(String hkey, String key) {
+		Jedis jedis = jedisPool.getResource();
+		Long result = jedis.hdel(hkey,key);
+		jedis.close();
+		return result;
+	}
+	
+	
+
 }

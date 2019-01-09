@@ -89,4 +89,24 @@ public class JedisClientCluster implements JedisClient {
 		return jedisCluster.ttl(key);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.taotao.rest.dao.JedisClient#del(java.lang.String)
+	 */
+	@Override
+	public long del(String key) {
+		return jedisCluster.del(key);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taotao.rest.dao.JedisClient#hdel(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public long hdel(String hkey, String key) {
+		return jedisCluster.hdel(hkey, key);
+	}
+	
+	
+	
+	
+
 }
