@@ -10,12 +10,12 @@
  */
 package com.taotao.search.service.impl;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +46,10 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private SolrServer solrServer;
 	
+	private static final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 	@Override
 	public TaotaoResult importAllItems(){
-
+		logger.info("导入商品信息到索引库");
 		try {
 			//查询商品列表
 			List<Item> list = itemMapper.getItemList();
@@ -67,7 +68,8 @@ public class ItemServiceImpl implements ItemService {
 				//写入索引库
 				solrServer.add(document);
 				count ++;
-				if(count >=10){
+				logger.info("导入第{}条",count);
+				if(count >=1000){
 					break;
 				}
 			}
