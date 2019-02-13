@@ -2,7 +2,9 @@
 package com.taotao.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.common.pojo.DataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.common.utils.HttpClientUtil;
 import com.taotao.common.utils.IDUtils;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
@@ -82,7 +85,8 @@ public class ItemServiceImpl implements ItemService {
 		if(result.getStatus() != 200){
 			throw new Exception("商品规格参数添加失败");
 		}
-		return TaotaoResult.ok();
+		
+		return TaotaoResult.ok(itemId);
 	}
 
 

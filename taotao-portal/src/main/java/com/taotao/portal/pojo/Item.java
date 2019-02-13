@@ -10,6 +10,8 @@
  */
 package com.taotao.portal.pojo;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**   
  * @Description: TODO 
  * @ClassName:  Item
@@ -132,6 +134,12 @@ public class Item {
 	}
 	
 	
+	public String[] getImages(){
+		if(StringUtils.isNotEmpty(image)){
+			return image.split(",");
+		}
+		return null;
+	}
 	
 
 }

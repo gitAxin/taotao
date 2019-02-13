@@ -39,4 +39,12 @@ public class ItemController {
 	public TaotaoResult importAllItems(){
 		return this.itemService.importAllItems();
 	}
+	
+	@RequestMapping("/importById")
+	@ResponseBody
+	public TaotaoResult importById(String id){
+		return this.itemService.importById(id);
+	}
+	
+	
 }

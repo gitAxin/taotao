@@ -24,4 +24,6 @@ import com.taotao.search.pojo.Item;
 public interface ItemMapper {
 
 	List<Item> getItemList();	
+	
+	Item getItemById(Long id);	
 }

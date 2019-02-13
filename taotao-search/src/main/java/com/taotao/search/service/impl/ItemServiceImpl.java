@@ -81,5 +81,39 @@ public class ItemServiceImpl implements ItemService {
 	
 		return TaotaoResult.ok();
 	}
+	/* (non-Javadoc)
+	 * @see com.taotao.search.service.ItemService#importById()
+	 */
+	@Override
+	public TaotaoResult importById(String id) {
+		logger.info("导入商品信息到索引库");
+		try {
+			//查询商品列表
+			Item item = itemMapper.getItemById(Long.valueOf(id));
+			if(item!=null){
+				//创建一个SolrInputDocument对象
+				SolrInputDocument document = new SolrInputDocument();
+				document.setField("id", item.getId());
+				document.setField("item_title", item.getTitle());
+				document.setField("item_sell_point", item.getSell_point());
+				document.setField("item_price", item.getPrice());
+				document.setField("item_image", item.getImage());
+				document.setField("item_category_name", item.getCategory_name());
+				document.setField("item_desc", item.getItem_des());
+				//写入索引库
+				solrServer.add(document);
+				solrServer.commit();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+	
+		return TaotaoResult.ok();
+	}
+	
+	
+	
 
 }

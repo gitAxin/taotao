@@ -26,4 +26,7 @@ import com.taotao.common.pojo.TaotaoResult;
 public interface ItemService {
 
 	TaotaoResult importAllItems();
+	
+	
+	TaotaoResult importById(String id);
 }

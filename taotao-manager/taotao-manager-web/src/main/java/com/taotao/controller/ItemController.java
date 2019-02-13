@@ -10,6 +10,9 @@
  */
 package com.taotao.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.taotao.common.pojo.DataGridResult;
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.common.utils.HttpClientUtil;
 import com.taotao.pojo.TbItem;
 import com.taotao.service.ItemService;
 
@@ -64,6 +68,11 @@ public class ItemController {
 	@ResponseBody
 	public TaotaoResult createItem(TbItem item, String desc, String itemParams) throws Exception{
 		TaotaoResult result = this.itemService.createItem(item,desc,itemParams);
+		//导入到solr服务中
+		Map<String,String> param = new HashMap<>();
+		long itemId = (long)result.getData();
+		param.put("id", itemId + "");
+		String doGet = HttpClientUtil.doGet("http://localhost:8083/search/manager/importById", param);
 		return result;
 	}
 	
