@@ -30,4 +30,27 @@ public interface ItemService {
 	 * @throws
 	 */
 	ItemInfo getItemById(Long itemId);
+	
+	
+	/**
+	 * 取商品描述
+	 * @Description: TODO  
+	 * @Title: getItemDescById   
+	 * @param: @param itemId
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
+	String getItemDescById(Long itemId);
+	
+	/**
+	 * 取商品规格参数
+	 * @Description: TODO  
+	 * @Title: getItemParam   
+	 * @param: @param itemId
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
+	String getItemParam(Long itemId);
 }

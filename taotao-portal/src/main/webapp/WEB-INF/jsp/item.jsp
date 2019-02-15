@@ -221,7 +221,7 @@
 					<b></b>如果您发现商品信息不准确，欢迎纠错
 				</div>
 				<div id="item-desc" class="detail-content">
-						${itemDesc.itemDesc }
+						<!-- 商品描述 -->
 				</div>
 			</div>
 			<div class="mc hide" data-widget="tab-content" id="product-detail-2">
@@ -294,6 +294,8 @@
 			
 			itemControl.getItemParam(itemId);
 		});
+		
+		
 		//延迟一秒加载商品描述信息
 		setTimeout(function(){
 			itemControl.getItemDesc(itemId);
