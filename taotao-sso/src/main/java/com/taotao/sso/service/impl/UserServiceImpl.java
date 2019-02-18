@@ -12,17 +12,21 @@ package com.taotao.sso.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.common.utils.JsonUtils;
 import com.taotao.mapper.TbUserMapper;
 import com.taotao.pojo.TbUser;
 import com.taotao.pojo.TbUserExample;
 import com.taotao.pojo.TbUserExample.Criteria;
+import com.taotao.sso.dao.JedisClient;
 import com.taotao.sso.service.UserService;
 
 /**   
@@ -38,6 +42,15 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private TbUserMapper userMapper;
+	
+	@Autowired
+	private JedisClient jedisClient;
+	
+	@Value("${REDIS_USER_SESSION_KEY}")
+	private String REDIS_USER_SESSION_KEY;
+	
+	@Value("${SSO_SESSION_EXPIRE}")
+	private Integer SSO_SESSION_EXPIRE;
 	/* (non-Javadoc)
 	 * @see com.taotao.sso.service.UserService#checkData(java.lang.String, java.lang.String)
 	 */
@@ -74,6 +87,34 @@ public class UserServiceImpl implements UserService {
 		userMapper.insert(user);
 		return TaotaoResult.ok();
 	}
+	/* (non-Javadoc)
+	 * @see com.taotao.sso.service.UserService#userLogin(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public TaotaoResult userLogin(String username, String password) {
+		TbUserExample example = new TbUserExample();
+		example.createCriteria().andUsernameEqualTo(username);
+		List<TbUser> list = this.userMapper.selectByExample(example);
+		if(CollectionUtils.isEmpty(list)){
+			return TaotaoResult.build(400, "用户名或密码错误");
+		}
+		TbUser user = list.get(0);
+		
+		if(!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getPassword())){
+			return TaotaoResult.build(400, "用户名或密码错误");
+		}
+		//生成token
+		String token = UUID.randomUUID().toString();
+		//保存用户之前，把用户密码清掉
+		user.setPassword(null);
+		String set = jedisClient.set(REDIS_USER_SESSION_KEY+":"+token, JsonUtils.objectToJson(user));
+		//设置session的过期时间
+		jedisClient.expire(REDIS_USER_SESSION_KEY+":"+token, SSO_SESSION_EXPIRE);
+		/*返回token*/
+		return TaotaoResult.ok(token);
+	}
+	
+	
 	
 	
 	

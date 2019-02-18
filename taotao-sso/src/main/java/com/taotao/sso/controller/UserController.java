@@ -92,4 +92,17 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping(value="/login")
+	@ResponseBody
+	public TaotaoResult login(String username, String password){
+		try {
+			TaotaoResult result = userService.userLogin(username, password);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		
+	}
 }
