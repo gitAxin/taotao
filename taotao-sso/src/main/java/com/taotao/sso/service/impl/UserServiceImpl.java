@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -113,6 +114,22 @@ public class UserServiceImpl implements UserService {
 		/*返回token*/
 		return TaotaoResult.ok(token);
 	}
+	/* (non-Javadoc)
+	 * @see com.taotao.sso.service.UserService#getUserByToken(java.lang.String)
+	 */
+	@Override
+	public TaotaoResult getUserByToken(String token) {
+
+		String string = jedisClient.get(REDIS_USER_SESSION_KEY + ":" + token);
+		if(StringUtils.isEmpty(string)){
+			return TaotaoResult.build(400,"此session已经过期，请重新登录");
+		}
+		//更新过期时间
+		jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token, SSO_SESSION_EXPIRE);
+		
+		return TaotaoResult.ok(JsonUtils.jsonToPojo(string, TbUser.class));
+	}
+	
 	
 	
 	

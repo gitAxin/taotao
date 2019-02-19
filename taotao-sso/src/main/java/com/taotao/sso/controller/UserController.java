@@ -105,4 +105,24 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping(value="/token/{token}")
+	@ResponseBody
+	public Object getUserByToken(@PathVariable("token")String token,String callback){
+		TaotaoResult result;
+		try {
+			result = userService.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result =  TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		
+		if(StringUtils.isEmpty(callback)){
+			return result;
+		}else{
+			 MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(result);
+			 mappingJacksonValue.setJsonpFunction(callback);
+			 return mappingJacksonValue;
+		}
+	}
 }

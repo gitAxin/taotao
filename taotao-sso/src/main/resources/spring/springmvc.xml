@@ -17,6 +17,9 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
-	
+	 <!--  当web.xml中配置的拦截路径为/时需要配置，如果不是/，而是/aaa/*,则不需要配置，因为/js不会拦截 -->
+	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
+	<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/images/" mapping="/images/**"/>
 	
 </beans>
