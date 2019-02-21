@@ -10,6 +10,11 @@
  */
 package com.taotao.sso.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -95,9 +100,10 @@ public class UserController {
 	
 	@RequestMapping(value="/login")
 	@ResponseBody
-	public TaotaoResult login(String username, String password){
+	public TaotaoResult login(String username, String password,
+				HttpServletRequest request, HttpServletResponse response){
 		try {
-			TaotaoResult result = userService.userLogin(username, password);
+			TaotaoResult result = userService.userLogin(username, password,request, response);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,5 +130,13 @@ public class UserController {
 			 mappingJacksonValue.setJsonpFunction(callback);
 			 return mappingJacksonValue;
 		}
+	}
+	
+	
+	@RequestMapping(value="/logout/{token}")
+	public void logout(@PathVariable("token")String token,String callback,
+			HttpServletRequest request, HttpServletResponse response) throws IOException{
+		this.userService.logout(token, request, response);
+		response.sendRedirect("http://localhost:8082");
 	}
 }
