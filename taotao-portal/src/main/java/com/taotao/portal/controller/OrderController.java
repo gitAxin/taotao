@@ -15,13 +15,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.taotao.pojo.TbUser;
 import com.taotao.portal.pojo.CartItem;
 import com.taotao.portal.pojo.Order;
 import com.taotao.portal.service.CartService;
@@ -64,9 +64,15 @@ public class OrderController {
 	 * @throws
 	 */
 	@RequestMapping("/create")
-	public String create(Order order,Model model){
+	public String create(Order order,HttpServletRequest request,Model model){
 		
 		try {
+			//调用创建订单服务之前补全用户信息
+			//从request中取用户信息(此用户信息是在拦截器中存入的)
+			TbUser user = (TbUser)request.getAttribute("user");
+			order.setUserId(user.getId());
+			order.setBuyerNick(user.getUsername());
+			//调用服务
 			String orderId = this.orderService.creteOrder(order);
 			model.addAttribute("orderId", orderId);
 			model.addAttribute("payment", order.getPayment());
